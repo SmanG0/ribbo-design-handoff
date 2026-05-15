@@ -78,14 +78,19 @@ body {
   overflow: visible;
 }
 
-/* Bare emoji avatar — no container, just the icon */
+/* Circular avatar — logo fills the circle */
 .avatar {
   width: 40px; height: 40px;
+  border-radius: 50%;
   flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 30px;
-  line-height: 1;
-  user-select: none;
+  overflow: hidden;
+  background: #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ── Bubbles ── */
@@ -235,55 +240,55 @@ body {
 <script>
 const brands = [
   {
-    title: 'ShopBot',
-    sub: 'Your 24/7 shopping assistant. Ask me anything.',
-    color: '#f97316',
-    emoji: '🛍️',
+    title: 'Shop Now',
+    sub: 'Everything you need — support available 24/7.',
+    color: '#1e3a6e',
+    logo: 'logos/shopnow.png',
     greeting: 'Hi! Looking for something specific today?',
     user: 'I want to return my order.',
     bot: 'No problem — returns are free within 30 days. Let me pull up your order right now.',
   },
   {
-    title: 'CareDesk',
-    sub: "Your clinic's virtual front desk. Always available.",
-    color: '#0d9488',
-    emoji: '🩺',
+    title: 'Care Desk',
+    sub: 'Putting you first — your virtual front desk.',
+    color: '#2563c0',
+    logo: 'logos/caredesk.png',
     greeting: 'Hello! How can I help you today?',
     user: 'Book an appointment please.',
     bot: 'Dr. Chen has slots this Thursday at 2pm and 4pm. Which works for you?',
   },
   {
-    title: 'DevBot',
-    sub: 'Instant answers from your docs and codebase.',
-    color: '#7c3aed',
-    emoji: '⚡',
-    greeting: 'Hi! Need help with the API or docs?',
-    user: 'How do I authenticate?',
-    bot: 'Use a Bearer token — Authorization: Bearer your_key. Full guide at docs.devbot.io',
+    title: 'Grow Inc',
+    sub: 'Grow yourself — wellness coaching, on demand.',
+    color: '#3a6b30',
+    logo: 'logos/grow.png',
+    greeting: 'Hi! Ready to help you grow today.',
+    user: 'What programs do you offer?',
+    bot: "We have nutrition, fitness, and mindset tracks. Which area are you focusing on?",
   },
   {
-    title: 'TasteBot',
+    title: 'Cafe Roasted',
     sub: 'Order, track, and get support — all in one chat.',
-    color: '#b45309',
-    emoji: '☕',
-    greeting: 'Hey! Ready to take your order',
+    color: '#163527',
+    logo: 'logos/cafe.png',
+    greeting: 'Hey! Ready to take your order.',
     user: 'Do you have oat milk lattes?',
     bot: "We do! Today's special is a brown sugar oat latte. Want to add one?",
   },
   {
-    title: 'WealthAI',
+    title: 'Wealth Management',
     sub: 'Bank-grade security. Human-level support.',
-    color: '#1d4ed8',
-    emoji: '📈',
+    color: '#111111',
+    logo: 'logos/wealth.png',
     greeting: 'Good day! How can I help with your finances?',
     user: "What's my account balance?",
     bot: 'Your main account is $12,847.32 · Savings: $4,210.55 — as of today.',
   },
   {
-    title: 'GlowBot',
+    title: 'Glow Personal Beauty',
     sub: 'Your personal beauty advisor, always on.',
-    color: '#db2777',
-    emoji: '🌸',
+    color: '#5c3d2e',
+    logo: 'logos/glow.png',
     greeting: 'Hey! What can I help you find today? ✨',
     user: "What's good for dry skin?",
     bot: 'Our Hydra-Boost serum is a bestseller — hyaluronic acid + vitamin E. Add to cart?',
@@ -327,7 +332,7 @@ function applyBrand(b) {
   hSub.textContent   = b.sub;
 
   [avG, avT, avB].forEach(function(av) {
-    av.textContent = b.emoji;
+    av.innerHTML = '<img src="' + b.logo + '" alt="">';
   });
 
   textG.textContent = b.greeting;
