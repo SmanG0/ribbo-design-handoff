@@ -316,7 +316,11 @@ let idx = 0, timers = [];
 
 function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 function hide(el, cls) { el.className = 'msg-row ' + cls; }
-function show(el)      { el.style.transform = 'none'; el.className = 'msg-row visible'; }
+function show(el) {
+  var dir = el.classList.contains('from-right') ? ' from-right' : '';
+  el.style.transform = 'none';
+  el.className = 'msg-row visible' + dir;
+}
 
 function applyBrand(b) {
   header.style.background  = b.color;
