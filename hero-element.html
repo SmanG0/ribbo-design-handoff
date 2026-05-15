@@ -78,18 +78,14 @@ body {
   overflow: visible;
 }
 
-/* Circular avatar — logo fills the circle */
+/* Logo avatar — image only, no container */
 .avatar {
-  width: 40px; height: 40px;
-  border-radius: 50%;
+  width: 44px; height: 44px;
   flex-shrink: 0;
-  overflow: hidden;
-  background: #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 .avatar img {
   width: 100%; height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 
@@ -242,7 +238,7 @@ const brands = [
   {
     title: 'Shop Now',
     sub: 'Everything you need — support available 24/7.',
-    color: '#1e3a6e',
+    color: '#e8a800',
     logo: 'logos/shopnow.png',
     greeting: 'Hi! Looking for something specific today?',
     user: 'I want to return my order.',
@@ -280,6 +276,7 @@ const brands = [
     sub: 'Bank-grade security. Human-level support.',
     color: '#111111',
     logo: 'logos/wealth.png',
+    avatarSize: '64px',
     greeting: 'Good day! How can I help with your finances?',
     user: "What's my account balance?",
     bot: 'Your main account is $12,847.32 · Savings: $4,210.55 — as of today.',
@@ -331,7 +328,10 @@ function applyBrand(b) {
   hTitle.textContent = b.title;
   hSub.textContent   = b.sub;
 
+  var sz = b.avatarSize || '44px';
   [avG, avT, avB].forEach(function(av) {
+    av.style.width = sz;
+    av.style.height = sz;
     av.innerHTML = '<img src="' + b.logo + '" alt="">';
   });
 
