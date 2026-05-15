@@ -51,23 +51,31 @@ body {
 /* ── Chat body ── */
 .chat-body {
   background: #f3f4f6;
-  padding: 16px 16px 12px;
+  padding: 16px 16px 4px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 220px;
 }
 
-/* ── Message rows ── */
+/* ── Message rows — hidden ones collapse to zero height ── */
 .msg-row {
   display: flex;
   align-items: flex-end;
   gap: 10px;
   opacity: 0;
-  transition: opacity 0.35s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  max-height: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+  transition: opacity 0.35s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              max-height 0.3s ease, margin-bottom 0.3s ease;
 }
 .msg-row.from-below { transform: translateY(10px); }
 .msg-row.from-right { transform: translateX(10px); justify-content: flex-end; }
+.msg-row.visible {
+  opacity: 1;
+  max-height: 120px;
+  margin-bottom: 10px;
+  overflow: visible;
+}
 
 /* Rounded-square avatar — matches Playground style */
 .avatar {
@@ -306,8 +314,8 @@ const textB = document.getElementById('text-bot');
 let idx = 0, timers = [];
 
 function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-function hide(el, cls) { el.style.opacity = '0'; el.className = 'msg-row ' + cls; }
-function show(el)      { el.style.opacity = '1'; el.style.transform = 'none'; }
+function hide(el, cls) { el.className = 'msg-row ' + cls; }
+function show(el)      { el.style.transform = 'none'; el.className = 'msg-row visible'; }
 
 function applyBrand(b) {
   const grad = 'linear-gradient(135deg,' + b.c1 + ',' + b.c2 + ')';

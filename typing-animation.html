@@ -2,601 +2,126 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ribbo — Typing Indicator Redesign</title>
+<title>Ribbo — Typing Indicator</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-  background: #06060f;
-  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  background: linear-gradient(160deg, #f0f4ff, #f8f6ff, #fff0fb);
   min-height: 100vh;
-}
-
-/* ── Nav ── */
-.nav {
-  padding: 14px 40px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  background: rgba(6,6,15,0.85);
-  backdrop-filter: blur(24px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.nav-logo { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; }
-.nav-logo span { color: #4249ff; }
-.nav-pill {
-  font-size: 11px; font-weight: 600;
-  padding: 4px 12px; border-radius: 20px;
-  background: rgba(66,73,255,0.12); color: #a5b4fc;
-  border: 1px solid rgba(66,73,255,0.2);
+  justify-content: center;
+  gap: 48px;
 }
 
-/* ── Page header ── */
-.page-header {
-  text-align: center;
-  padding: 56px 32px 48px;
-  background: #06060f;
-}
-.page-tag {
-  display: inline-block;
-  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-  color: #4249ff; margin-bottom: 14px;
-}
-.page-title {
-  font-size: 42px; font-weight: 800; letter-spacing: -0.03em;
-  background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.5));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 14px;
-}
-.page-sub { font-size: 15px; color: rgba(255,255,255,0.45); max-width: 460px; margin: 0 auto; line-height: 1.6; }
-
-/* ── Gradient stage ── */
-@keyframes mesh-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-.gradient-stage {
-  background: linear-gradient(160deg, #c4b5fd 0%, #818cf8 20%, #4249ff 40%, #3b82f6 60%, #67e8f9 85%, #a7f3d0 100%);
-  background-size: 300% 300%;
-  animation: mesh-shift 8s ease infinite;
-  padding: 64px 40px;
+/* ── Labels ── */
+.label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.09em; color: #9ca3af; margin-bottom: 10px;
 }
 
-/* ── Section headings ── */
-.section-label {
-  text-align: center; margin-bottom: 44px;
-}
-.section-tag {
-  display: inline-block; font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.07em;
-  padding: 4px 14px; border-radius: 20px;
-  background: rgba(255,255,255,0.18); color: #fff;
-  margin-bottom: 10px;
-}
-.section-title-lg {
-  font-size: 28px; font-weight: 800; letter-spacing: -0.025em;
-  color: #fff; margin-bottom: 6px;
-}
-.section-sub-sm { font-size: 13px; color: rgba(255,255,255,0.6); }
-
-/* ── Compare grid ── */
-.compare-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-  max-width: 860px; margin: 0 auto;
-}
-.compare-card {
-  background: rgba(255,255,255,0.11);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.22);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.25);
-  border-radius: 20px; padding: 28px 28px 24px;
-}
-.compare-card-label {
-  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em;
-  margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;
-}
-.lbl-old { color: rgba(255,255,255,0.5); }
-.lbl-new { color: #a5f3fc; }
-.badge {
-  font-size: 10px; font-weight: 700; padding: 2px 9px;
-  border-radius: 20px; border: 1px solid;
-}
-.badge-v1 { border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.06); }
-.badge-v2 { border-color: rgba(165,243,252,0.3); color: #a5f3fc; background: rgba(165,243,252,0.08); }
-
-/* ── Chat context row ── */
-.chat-row { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 6px; }
-.avatar {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; color: #fff;
-  background: linear-gradient(135deg, #4249ff, #6366f1);
-}
-
-/* ── State row (Static / Animated) ── */
-.state-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 4px;
-}
-.state-col { display: flex; flex-direction: column; gap: 8px; }
-.state-lbl {
-  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.35);
-}
-
-/* ── OLD typing bubble ── */
-.bubble-old {
-  background: #f3f4f6;
-  border-radius: 14px 14px 14px 3px;
-  padding: 11px 15px;
-  display: inline-flex; gap: 5px; align-items: center;
-}
-.dot-old-static {
-  width: 6px; height: 6px; border-radius: 50%; background: #9ca3af;
-}
-@keyframes old-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-.dot-old-anim {
-  width: 6px; height: 6px; border-radius: 50%; background: #9ca3af;
-  animation: old-bounce 0.6s ease infinite;
-}
-.dot-old-anim:nth-child(2) { animation-delay: 0.15s; }
-.dot-old-anim:nth-child(3) { animation-delay: 0.30s; }
-
-/* ── NEW typing bubble ── */
-.bubble-new {
+/* ── Glass bubble ── */
+.typing-glass {
   background: rgba(255,255,255,0.72);
   backdrop-filter: blur(24px) saturate(200%);
   -webkit-backdrop-filter: blur(24px) saturate(200%);
   border: 1px solid rgba(255,255,255,0.82);
   box-shadow:
-    0 8px 32px rgba(66,73,255,0.20),
-    0 2px 8px rgba(0,0,0,0.06),
+    0 6px 24px rgba(66,73,255,0.10),
+    0 2px 8px rgba(0,0,0,0.05),
     inset 0 1px 0 rgba(255,255,255,0.96);
   border-radius: 18px 18px 18px 4px;
-  padding: 13px 17px;
-  display: inline-flex; gap: 6px; align-items: center;
+  padding: 13px 18px;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
 }
-.dot-new-static {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(66, 73, 255, 0.72);
-  transform: translateY(-3px);
-  opacity: 0.85;
-}
+
+/* ── Apple-style dot animation ── */
 @keyframes apple-dot {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.35;
-  }
-  30% {
-    transform: translateY(-3px);
-    opacity: 0.85;
-  }
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.35; }
+  30%           { transform: translateY(-3px); opacity: 0.85; }
 }
-.dot-new-anim {
-  width: 7px; height: 7px; border-radius: 50%;
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
   background: rgba(66, 73, 255, 0.72);
   animation: apple-dot 1.2s ease-in-out infinite;
 }
-.dot-new-anim:nth-child(2) { animation-delay: 0.16s; }
-.dot-new-anim:nth-child(3) { animation-delay: 0.32s; }
+.dot:nth-child(2) { animation-delay: 0.16s; }
+.dot:nth-child(3) { animation-delay: 0.32s; }
 
-/* ── Property tags ── */
-.tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 16px; }
-.tag {
-  font-size: 9.5px; font-weight: 600;
-  padding: 3px 8px; border-radius: 6px;
-}
-.tag-plain { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.5); }
-.tag-highlight { background: rgba(66,73,255,0.18); color: #a5b4fc; }
-
-/* ── White section: in-context preview ── */
-.white-section {
-  background: #fff; padding: 80px 40px;
-}
-.white-section .section-tag { background: rgba(66,73,255,0.08); color: #4249ff; }
-.white-section .section-title-lg { color: #0a0a0a; }
-.white-section .section-sub-sm { color: #9ca3af; }
-.white-section .section-label { margin-bottom: 48px; }
-
-.context-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-  max-width: 780px; margin: 0 auto;
-}
-.context-col { display: flex; flex-direction: column; gap: 12px; }
-.context-lbl {
-  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
-  color: #d1d5db; padding-bottom: 2px;
-}
-
-/* Ambient gradient panel (shows glass properly) */
-.ambient-panel {
-  background: linear-gradient(160deg, #f0f4ff 0%, #f8f6ff 35%, #fff0fb 65%, #f0f8ff 100%);
-  border-radius: 16px; padding: 24px;
-}
-
-/* Mini full-chat-widget preview */
-.mini-widget {
-  width: 100%; border-radius: 16px; overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.10); border: 1px solid rgba(0,0,0,0.06);
-}
-.mini-header {
-  padding: 13px 16px; color: #fff;
-  background: linear-gradient(135deg, #4249ff, #6366f1);
-}
-.mini-header-name { font-size: 13px; font-weight: 700; }
-.mini-header-sub { font-size: 10px; opacity: 0.78; margin-top: 1px; }
-.mini-body {
-  background: linear-gradient(160deg, #f0f4ff, #f8f6ff);
-  padding: 14px; display: flex; flex-direction: column; gap: 10px;
-}
-.bot-bubble {
-  background: rgba(255,255,255,0.82);
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  border: 1px solid rgba(255,255,255,0.9);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.95);
-  border-radius: 12px 12px 12px 3px;
-  padding: 9px 12px;
-  font-size: 11.5px; color: #111; line-height: 1.5; max-width: 85%;
-}
-.user-bubble {
-  background: linear-gradient(135deg, #4249ff, #6366f1);
-  border-radius: 12px 12px 3px 12px;
-  padding: 9px 12px;
-  font-size: 11.5px; color: #fff; line-height: 1.5;
-  align-self: flex-end; max-width: 78%;
-}
-.mini-avatar {
-  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+/* ── Chat context ── */
+.chat-row { display: flex; align-items: flex-end; gap: 10px; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+  background: linear-gradient(135deg,#4249ff,#6366f1);
   display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 800; color: #fff;
-  background: linear-gradient(135deg, #4249ff, #6366f1);
-}
-.mini-row { display: flex; align-items: flex-end; gap: 7px; }
-.mini-input {
-  background: #fff; border: 1px solid #e5e7eb;
-  border-radius: 24px; padding: 8px 14px;
-  display: flex; align-items: center; gap: 8px;
-  margin: 4px 0 2px;
-}
-.mini-input-text { font-size: 11px; color: #d1d5db; flex: 1; }
-.mini-send {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: linear-gradient(135deg, #4249ff, #6366f1);
-  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
 }
 
-/* ── Code section ── */
-.code-section { background: #06060f; padding: 80px 40px 96px; }
-.code-section .section-tag { background: rgba(66,73,255,0.12); color: #a5b4fc; }
-.code-section .section-label { margin-bottom: 44px; }
-
-.code-wrap {
-  max-width: 680px; margin: 0 auto;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px; overflow: hidden;
-}
-.code-topbar {
-  padding: 10px 18px; background: rgba(255,255,255,0.04);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex; align-items: center; gap: 6px;
-}
-.code-dot { width: 10px; height: 10px; border-radius: 50%; }
-.code-pre {
-  padding: 24px 26px;
-  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-  font-size: 12.5px; line-height: 1.72; color: rgba(255,255,255,0.75);
-  overflow-x: auto;
-}
-.c { color: #4b5568; }
-.p { color: #a5b4fc; }
-.v { color: #86efac; }
-.k { color: #f9a8d4; }
-.s { color: #fde68a; }
-
-.files-box {
-  max-width: 680px; margin: 24px auto 0;
-  background: rgba(66,73,255,0.08);
-  border: 1px solid rgba(66,73,255,0.2);
-  border-radius: 12px; padding: 18px 22px;
-}
-.files-box-title { font-size: 12px; font-weight: 700; color: #a5b4fc; margin-bottom: 10px; }
-.files-box-list { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 2.0; }
-code {
-  background: rgba(255,255,255,0.07); padding: 1px 6px;
-  border-radius: 5px; color: #a5f3fc; font-family: 'Menlo', 'Monaco', monospace;
-}
-
-.footer-note {
-  text-align: center; margin-top: 60px;
-  font-size: 11px; color: rgba(255,255,255,0.15);
-}
+/* ── Compare pair ── */
+.pair { display: flex; gap: 48px; align-items: flex-start; }
+.col { display: flex; flex-direction: column; }
 </style>
 </head>
 <body>
 
-<!-- Nav -->
-<nav class="nav">
-  <div class="nav-logo">Ribbo<span>.</span>ai</div>
-  <span class="nav-pill">Design Handoff · Typing Indicator · 2026</span>
-</nav>
-
-<!-- Page header -->
-<div class="page-header">
-  <div class="page-tag">Typing Indicator Redesign</div>
-  <h1 class="page-title">From blocky to liquid glass</h1>
-  <p class="page-sub">Replacing the flat gray bubble with a frosted glass indicator that matches the new liquid glass design language.</p>
-</div>
-
-<!-- ── SECTION 1: Side-by-side comparison on gradient ── -->
-<div class="gradient-stage">
-  <div class="section-label">
-    <div class="section-tag">Side-by-side comparison</div>
-    <div class="section-title-lg">Before &amp; After — Static + Animated</div>
-    <div class="section-sub-sm">The gradient background is required to show the glass effect. Both static (snapshot) and animated states are shown.</div>
-  </div>
-
-  <div class="compare-grid">
-
-    <!-- OLD -->
-    <div class="compare-card">
-      <div class="compare-card-label">
-        <span class="lbl-old">Current — v1</span>
-        <span class="badge badge-v1">In production</span>
-      </div>
-
-      <div class="state-row">
-        <div class="state-col">
-          <span class="state-lbl">Static</span>
-          <div class="chat-row">
-            <div class="avatar">R</div>
-            <div class="bubble-old">
-              <span class="dot-old-static"></span>
-              <span class="dot-old-static"></span>
-              <span class="dot-old-static"></span>
-            </div>
-          </div>
-        </div>
-        <div class="state-col">
-          <span class="state-lbl">Animated</span>
-          <div class="chat-row">
-            <div class="avatar">R</div>
-            <div class="bubble-old">
-              <span class="dot-old-anim"></span>
-              <span class="dot-old-anim"></span>
-              <span class="dot-old-anim"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tag-row">
-        <span class="tag tag-plain">bg: #f3f4f6</span>
-        <span class="tag tag-plain">radius: 14px/3px</span>
-        <span class="tag tag-plain">dots: gray 6px</span>
-        <span class="tag tag-plain">bounce: translateY</span>
-        <span class="tag tag-plain">no blur</span>
-        <span class="tag tag-plain">no shadow</span>
-      </div>
+<!-- Animated (in chat context) -->
+<div class="col">
+  <div class="label">New — animated</div>
+  <div class="chat-row">
+    <div class="avatar">✦</div>
+    <div class="typing-glass">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
     </div>
-
-    <!-- NEW -->
-    <div class="compare-card">
-      <div class="compare-card-label">
-        <span class="lbl-new">Proposed — Liquid Glass</span>
-        <span class="badge badge-v2">New design</span>
-      </div>
-
-      <div class="state-row">
-        <div class="state-col">
-          <span class="state-lbl">Static</span>
-          <div class="chat-row">
-            <div class="avatar">R</div>
-            <div class="bubble-new">
-              <span class="dot-new-static"></span>
-              <span class="dot-new-static"></span>
-              <span class="dot-new-static"></span>
-            </div>
-          </div>
-        </div>
-        <div class="state-col">
-          <span class="state-lbl">Animated</span>
-          <div class="chat-row">
-            <div class="avatar">R</div>
-            <div class="bubble-new">
-              <span class="dot-new-anim"></span>
-              <span class="dot-new-anim"></span>
-              <span class="dot-new-anim"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tag-row">
-        <span class="tag tag-highlight">backdrop-filter blur(24px)</span>
-        <span class="tag tag-highlight">rgba white 72%</span>
-        <span class="tag tag-highlight">radius: 18px/4px</span>
-        <span class="tag tag-highlight">gradient dots</span>
-        <span class="tag tag-highlight">glow shadow</span>
-        <span class="tag tag-highlight">inset highlight</span>
-      </div>
-    </div>
-
   </div>
 </div>
 
-<!-- ── SECTION 2: In-context white preview ── -->
-<div class="white-section">
-  <div class="section-label">
-    <div class="section-tag">In-context preview</div>
-    <div class="section-title-lg" style="color:#0a0a0a;">New indicator in the chat widget</div>
-    <div class="section-sub-sm">The glass bubble requires a non-white background to show its full effect — it lives inside the ambient-gradient chat body.</div>
-  </div>
-
-  <div class="context-grid">
-
-    <!-- On ambient gradient -->
-    <div class="context-col">
-      <div class="context-lbl">On ambient gradient</div>
-      <div class="ambient-panel">
-        <div class="chat-row" style="gap:9px;">
-          <div class="avatar">R</div>
-          <div class="bubble-new">
-            <span class="dot-new-anim"></span>
-            <span class="dot-new-anim"></span>
-            <span class="dot-new-anim"></span>
-          </div>
-        </div>
-      </div>
-      <p style="font-size:11px; color:#9ca3af; line-height:1.6; max-width:200px;">
-        This is how it sits inside the chat body when the widget background is the ambient gradient.
-      </p>
+<!-- Static snapshot -->
+<div class="col">
+  <div class="label">Static snapshot</div>
+  <div class="chat-row">
+    <div class="avatar">✦</div>
+    <div class="typing-glass">
+      <span class="dot" style="animation-play-state:paused; opacity:0.85; transform:translateY(-3px);"></span>
+      <span class="dot" style="animation-play-state:paused; opacity:0.5;"></span>
+      <span class="dot" style="animation-play-state:paused; opacity:0.35;"></span>
     </div>
-
-    <!-- Full mini-widget -->
-    <div class="context-col">
-      <div class="context-lbl">Full widget context</div>
-      <div class="mini-widget">
-        <div class="mini-header">
-          <div class="mini-header-name">Customer Service</div>
-          <div class="mini-header-sub">● Online · Replies instantly</div>
-        </div>
-        <div class="mini-body">
-          <div class="mini-row">
-            <div class="mini-avatar">R</div>
-            <div class="bot-bubble">Hey! How can I help you today?</div>
-          </div>
-          <div class="user-bubble">Can you track my order?</div>
-          <div class="mini-row">
-            <div class="mini-avatar">R</div>
-            <div class="bubble-new" style="padding:11px 15px;">
-              <span class="dot-new-anim"></span>
-              <span class="dot-new-anim"></span>
-              <span class="dot-new-anim"></span>
-            </div>
-          </div>
-          <div class="mini-input">
-            <span class="mini-input-text">Ask a question…</span>
-            <div class="mini-send">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p style="font-size:11px; color:#9ca3af; line-height:1.6; max-width:220px;">
-        Complete chat widget. The glass bubble reads well against the gradient chat body.
-      </p>
-    </div>
-
   </div>
 </div>
 
-<!-- ── SECTION 3: CSS reference ── -->
-<div class="code-section">
-  <div class="section-label">
-    <div class="section-tag">Implementation</div>
-    <div class="section-title-lg">CSS &amp; Tailwind reference</div>
-    <div class="section-sub-sm" style="color:rgba(255,255,255,0.38);">Drop-in replacement. Update HeroDemo.tsx and Playground.tsx.</div>
-  </div>
-
-  <div class="code-wrap">
-    <div class="code-topbar">
-      <div class="code-dot" style="background:#ff5f57;"></div>
-      <div class="code-dot" style="background:#febc2e;"></div>
-      <div class="code-dot" style="background:#28c840;"></div>
-      <span style="font-size:11px; color:rgba(255,255,255,0.3); margin-left:8px; font-family:monospace;">globals.css</span>
-    </div>
-    <pre class="code-pre"><span class="c">/* Add to app/globals.css */</span>
-
-<span class="c">/* Liquid glass typing bubble */</span>
-<span class="p">.typing-glass</span> {
-  <span class="p">background</span>: <span class="v">rgba(255, 255, 255, 0.72)</span>;
-  <span class="p">backdrop-filter</span>: <span class="v">blur(24px) saturate(200%)</span>;
-  <span class="p">-webkit-backdrop-filter</span>: <span class="v">blur(24px) saturate(200%)</span>;
-  <span class="p">border</span>: <span class="v">1px solid rgba(255, 255, 255, 0.82)</span>;
-  <span class="p">box-shadow</span>:
-    <span class="v">0 8px 32px rgba(66, 73, 255, 0.20)</span>,
-    <span class="v">0 2px 8px  rgba(0, 0, 0, 0.06)</span>,
-    <span class="v">inset 0 1px 0 rgba(255, 255, 255, 0.96)</span>;
-  <span class="p">border-radius</span>: <span class="v">18px 18px 18px 4px</span>;
-  <span class="p">padding</span>: <span class="v">13px 17px</span>;
-  <span class="p">display</span>: <span class="v">flex</span>;
-  <span class="p">gap</span>: <span class="v">6px</span>;
-  <span class="p">align-items</span>: <span class="v">center</span>;
+<!-- CSS reference -->
+<div class="col" style="max-width:460px; background:rgba(255,255,255,0.7); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.8); border-radius:14px; padding:20px 24px;">
+  <div class="label" style="margin-bottom:12px;">CSS — copy into globals.css</div>
+  <pre style="font-family:Menlo,monospace; font-size:11.5px; line-height:1.75; color:#374151; white-space:pre-wrap;">.typing-glass {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.82);
+  box-shadow: 0 6px 24px rgba(66,73,255,0.10),
+              0 2px 8px rgba(0,0,0,0.05),
+              inset 0 1px 0 rgba(255,255,255,0.96);
+  border-radius: 18px 18px 18px 4px;
+  padding: 13px 18px;
+  display: flex; gap: 6px; align-items: center;
 }
-
-<span class="c">/* Gradient dot with glow */</span>
-<span class="p">.typing-dot</span> {
-  <span class="p">width</span>: <span class="v">7px</span>;
-  <span class="p">height</span>: <span class="v">7px</span>;
-  <span class="p">border-radius</span>: <span class="v">50%</span>;
-  <span class="p">background</span>: <span class="v">linear-gradient(135deg, #4249ff, #8b5cf6)</span>;
-  <span class="p">animation</span>: <span class="v">liquid-pulse 1.05s cubic-bezier(0.45, 0, 0.55, 1) infinite</span>;
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(66,73,255,0.72);
+  animation: apple-dot 1.2s ease-in-out infinite;
 }
-<span class="p">.typing-dot:nth-child(2)</span> { <span class="p">animation-delay</span>: <span class="v">0.21s</span>; }
-<span class="p">.typing-dot:nth-child(3)</span> { <span class="p">animation-delay</span>: <span class="v">0.42s</span>; }
+.typing-dot:nth-child(2) { animation-delay: 0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0.32s; }
 
-<span class="k">@keyframes</span> <span class="s">liquid-pulse</span> {
-  <span class="v">0%, 100%</span> {
-    <span class="p">transform</span>: <span class="v">scale(0.62) translateY(2px)</span>;
-    <span class="p">opacity</span>: <span class="v">0.32</span>;
-    <span class="p">box-shadow</span>: <span class="v">0 0 4px rgba(66, 73, 255, 0.12)</span>;
-  }
-  <span class="v">50%</span> {
-    <span class="p">transform</span>: <span class="v">scale(1.18) translateY(-2px)</span>;
-    <span class="p">opacity</span>: <span class="v">1</span>;
-    <span class="p">box-shadow</span>: <span class="v">0 0 16px rgba(66, 73, 255, 0.58),
-                  0 0 5px  rgba(139, 92, 246, 0.38)</span>;
-  }
+@keyframes apple-dot {
+  0%,60%,100% { transform:translateY(0);    opacity:0.35; }
+  30%         { transform:translateY(-3px); opacity:0.85; }
 }</pre>
-  </div>
-
-  <div class="code-wrap" style="margin-top:20px;">
-    <div class="code-topbar">
-      <div class="code-dot" style="background:#ff5f57;"></div>
-      <div class="code-dot" style="background:#febc2e;"></div>
-      <div class="code-dot" style="background:#28c840;"></div>
-      <span style="font-size:11px; color:rgba(255,255,255,0.3); margin-left:8px; font-family:monospace;">HeroDemo.tsx — replace lines 143–154</span>
-    </div>
-    <pre class="code-pre"><span class="c">{'/* Replace the current typing bubble JSX with: */'}</span>
-
-&lt;<span class="s">div</span> <span class="p">className</span>=<span class="v">"flex items-end gap-2"</span>&gt;
-  &lt;<span class="s">div</span> <span class="p">className</span>=<span class="v">"w-6 h-6 rounded-full … avatar"</span>&gt;
-    &lt;<span class="s">img</span> <span class="p">src</span>=<span class="v">"/logo-r.svg"</span> … /&gt;
-  &lt;/<span class="s">div</span>&gt;
-
-  &lt;<span class="c">{'/* New glass bubble */'}</span>&gt;
-  &lt;<span class="s">div</span> <span class="p">className</span>=<span class="v">"typing-glass"</span>&gt;
-    &lt;<span class="s">span</span> <span class="p">className</span>=<span class="v">"typing-dot"</span> /&gt;
-    &lt;<span class="s">span</span> <span class="p">className</span>=<span class="v">"typing-dot"</span> /&gt;
-    &lt;<span class="s">span</span> <span class="p">className</span>=<span class="v">"typing-dot"</span> /&gt;
-  &lt;/<span class="s">div</span>&gt;
-&lt;/<span class="s">div</span>&gt;
-
-<span class="c">{'/* Also update Playground.tsx lines 304-308 — same pattern */'}</span></pre>
-  </div>
-
-  <div class="files-box">
-    <div class="files-box-title">Files to update</div>
-    <div class="files-box-list">
-      · <code>app/globals.css</code> — add <code>.typing-glass</code>, <code>.typing-dot</code>, <code>@keyframes liquid-pulse</code><br>
-      · <code>components/HeroDemo.tsx</code> — replace bubble at lines 143–154<br>
-      · <code>components/Playground.tsx</code> — replace bubble at lines 304–308<br>
-    </div>
-  </div>
-
-  <div class="footer-note">
-    Ribbo Design Handoff · Typing Indicator Redesign · v2 · 2026
-  </div>
 </div>
 
 </body>
