@@ -48,10 +48,11 @@ body {
   line-height: 1.45;
 }
 
-/* ── Chat body ── */
+/* ── Chat body — fixed height so widget is full-sized on load ── */
 .chat-body {
   background: #f3f4f6;
   padding: 16px 16px 4px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
 }
@@ -239,7 +240,7 @@ const brands = [
   {
     title: 'ShopBot',
     sub: 'Your 24/7 shopping assistant. Ask me anything.',
-    c1: '#ea580c', c2: '#f97316',
+    color: '#f97316',
     emoji: '🛍️',
     greeting: 'Hi! Looking for something specific today?',
     user: 'I want to return my order.',
@@ -248,7 +249,7 @@ const brands = [
   {
     title: 'CareDesk',
     sub: "Your clinic's virtual front desk. Always available.",
-    c1: '#0f766e', c2: '#0d9488',
+    color: '#0d9488',
     emoji: '🩺',
     greeting: 'Hello! How can I help you today?',
     user: 'Book an appointment please.',
@@ -257,7 +258,7 @@ const brands = [
   {
     title: 'DevBot',
     sub: 'Instant answers from your docs and codebase.',
-    c1: '#6d28d9', c2: '#7c3aed',
+    color: '#7c3aed',
     emoji: '⚡',
     greeting: 'Hi! Need help with the API or docs?',
     user: 'How do I authenticate?',
@@ -266,7 +267,7 @@ const brands = [
   {
     title: 'TasteBot',
     sub: 'Order, track, and get support — all in one chat.',
-    c1: '#92400e', c2: '#d97706',
+    color: '#b45309',
     emoji: '☕',
     greeting: 'Hey! Ready to take your order',
     user: 'Do you have oat milk lattes?',
@@ -275,7 +276,7 @@ const brands = [
   {
     title: 'WealthAI',
     sub: 'Bank-grade security. Human-level support.',
-    c1: '#1e3a8a', c2: '#1d4ed8',
+    color: '#1d4ed8',
     emoji: '📈',
     greeting: 'Good day! How can I help with your finances?',
     user: "What's my account balance?",
@@ -284,7 +285,7 @@ const brands = [
   {
     title: 'GlowBot',
     sub: 'Your personal beauty advisor, always on.',
-    c1: '#be185d', c2: '#db2777',
+    color: '#db2777',
     emoji: '🌸',
     greeting: 'Hey! What can I help you find today? ✨',
     user: "What's good for dry skin?",
@@ -318,22 +319,21 @@ function hide(el, cls) { el.className = 'msg-row ' + cls; }
 function show(el)      { el.style.transform = 'none'; el.className = 'msg-row visible'; }
 
 function applyBrand(b) {
-  const grad = 'linear-gradient(135deg,' + b.c1 + ',' + b.c2 + ')';
-  header.style.background   = grad;
-  talkBtn.style.background  = grad;
+  header.style.background  = b.color;
+  talkBtn.style.background = b.color;
 
   hTitle.textContent = b.title;
   hSub.textContent   = b.sub;
 
   [avG, avT, avB].forEach(function(av) {
-    av.style.background = grad;
+    av.style.background = b.color;
     av.textContent = b.emoji;
   });
 
   textG.textContent = b.greeting;
   textU.textContent = b.user;
   textB.textContent = b.bot;
-  textU.style.background = grad;
+  textU.style.background = b.color;
 }
 
 function run(i) {
