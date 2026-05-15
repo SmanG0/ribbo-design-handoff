@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ribbo — Hero Chatbot Variations</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background: #fff;
+  color: #0a0a0a;
+  min-height: 100vh;
+}
+
+/* ── Nav ── */
+.nav {
+  padding: 14px 48px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(24px); position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-size: 15px; font-weight: 800; letter-spacing: -0.02em; color: #0a0a0a; }
+.nav-logo span { color: #4249ff; }
+.nav-pill {
+  font-size: 11px; font-weight: 600;
+  padding: 4px 12px; border-radius: 20px;
+  background: rgba(66,73,255,0.08); color: #4249ff;
+  border: 1px solid rgba(66,73,255,0.15);
+}
+
+/* ── HERO MOCKUP SECTION ── */
+.hero-section {
+  max-width: 1200px; margin: 0 auto;
+  padding: 96px 48px 80px;
+  display: grid; grid-template-columns: 1fr 1.15fr;
+  gap: 40px; align-items: center;
+}
+
+/* Left col — text */
+.hero-text { padding-right: 24px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 22px;
+  background: rgba(66,73,255,0.08); color: #4249ff;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4249ff; animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+.hero-headline {
+  font-size: 52px; font-weight: 800;
+  line-height: 1.04; letter-spacing: -0.03em;
+  color: #0a0a0a; margin-bottom: 18px;
+}
+.hero-sub {
+  font-size: 15px; color: #6b7280; line-height: 1.65;
+  max-width: 380px; margin-bottom: 28px;
+}
+.hero-ctas { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.btn-primary {
+  font-size: 14px; font-weight: 700; color: #fff;
+  padding: 13px 24px; border-radius: 12px; text-decoration: none;
+  background: linear-gradient(135deg, #4249ff, #6366f1);
+  box-shadow: 0 4px 20px rgba(66,73,255,0.35), inset 0 1px 0 rgba(255,255,255,0.18);
+  display: inline-block;
+}
+.btn-ghost {
+  font-size: 14px; font-weight: 600; color: #0a0a0a;
+  display: flex; align-items: center; gap: 5px; text-decoration: none;
+}
+.hero-trust { display: flex; align-items: center; gap: 18px; }
+.trust-item {
+  font-size: 11px; color: #9ca3af;
+  display: flex; align-items: center; gap: 5px;
+}
+
+/* Right col — chatbot showcase */
+.hero-right {
+  position: relative;
+  height: 420px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Mini chatbot widget (used in hero) ── */
+.mini-chat {
+  position: absolute;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: transform 0.3s ease;
+}
+.mini-chrome {
+  background: #f5f5f7;
+  padding: 8px 12px;
+  display: flex; align-items: center; gap: 5px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.chrome-dot { width: 9px; height: 9px; border-radius: 50%; }
+.mini-header {
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.mini-header-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.mini-header-name { font-size: 13px; font-weight: 700; }
+.mini-header-status {
+  font-size: 9.5px; font-weight: 600;
+  display: flex; align-items: center; gap: 4px; margin-top: 1px;
+  color: #059669;
+}
+.mini-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #059669; }
+.mini-body-chat {
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 120px;
+}
+.mini-msg-row { display: flex; align-items: flex-end; gap: 7px; }
+.mini-avatar-sm {
+  width: 22px; height: 22px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 800; color: #fff;
+}
+.mini-bubble-bot {
+  font-size: 10.5px; line-height: 1.5;
+  padding: 8px 10px; border-radius: 10px 10px 10px 2px;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.95);
+  color: #111; max-width: 86%;
+}
+.mini-bubble-user {
+  font-size: 10.5px; line-height: 1.5;
+  padding: 8px 10px; border-radius: 10px 10px 2px 10px;
+  color: #fff; max-width: 80%; margin-left: auto;
+}
+.mini-input-bar {
+  margin: 4px 14px 12px;
+  background: #f9fafb; border: 1px solid #e5e7eb;
+  border-radius: 20px; padding: 7px 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.mini-input-ph { font-size: 10px; color: #d1d5db; flex: 1; }
+.mini-send-btn {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Typing dots (new glass style) ── */
+.typing-glass {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.82);
+  box-shadow: 0 8px 32px rgba(66,73,255,0.20), 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.96);
+  border-radius: 14px 14px 14px 3px;
+  padding: 11px 14px;
+  display: inline-flex; gap: 5px; align-items: center;
+}
+@keyframes liquid-pulse {
+  0%, 100% { transform: scale(0.62) translateY(2px); opacity: 0.32; box-shadow: 0 0 4px rgba(66,73,255,0.12); }
+  50% { transform: scale(1.18) translateY(-2px); opacity: 1; box-shadow: 0 0 16px rgba(66,73,255,0.58), 0 0 5px rgba(139,92,246,0.38); }
+}
+.typing-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: linear-gradient(135deg, #4249ff, #8b5cf6);
+  animation: liquid-pulse 1.05s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.21s; }
+.typing-dot:nth-child(3) { animation-delay: 0.42s; }
+
+/* ── Hero right: 3 positioned chatbots ── */
+.hero-chat-center {
+  width: 270px; z-index: 3;
+  transform: none;
+}
+.hero-chat-left {
+  width: 220px; z-index: 1;
+  left: -20px; top: 40px;
+  transform: rotate(-5deg);
+  opacity: 0.7;
+  filter: blur(0.5px);
+}
+.hero-chat-right {
+  width: 220px; z-index: 2;
+  right: -20px; top: 40px;
+  transform: rotate(5deg);
+  opacity: 0.75;
+  filter: blur(0.3px);
+}
+
+/* label over the hero right */
+.hero-right-label {
+  position: absolute; top: -6px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  color: #9ca3af; white-space: nowrap;
+  background: #fff; padding: 3px 12px; border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  z-index: 10;
+}
+
+/* ── DIVIDER ── */
+@keyframes mesh-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.divider-strip {
+  background: linear-gradient(160deg, #c4b5fd 0%, #818cf8 20%, #4249ff 40%, #3b82f6 60%, #67e8f9 85%, #a7f3d0 100%);
+  background-size: 300% 300%; animation: mesh-shift 8s ease infinite;
+  padding: 56px 48px; text-align: center;
+}
+.divider-title {
+  font-size: 34px; font-weight: 800; letter-spacing: -0.025em;
+  color: #fff; margin-bottom: 10px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+}
+.divider-sub { font-size: 14px; color: rgba(255,255,255,0.72); }
+
+/* ── GALLERY ── */
+.gallery-section {
+  background: #fafafa;
+  padding: 72px 48px 96px;
+}
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 28px; max-width: 1160px; margin: 0 auto;
+}
+
+/* ── Full chatbot card (gallery) ── */
+.chat-card {
+  background: #fff;
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 6px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.card-chrome {
+  background: #f5f5f7;
+  padding: 9px 14px;
+  display: flex; align-items: center; gap: 5px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.card-chrome-url {
+  flex: 1; background: #fff; border-radius: 6px;
+  padding: 3px 10px; margin: 0 8px;
+  border: 1px solid #e5e7eb; text-align: center;
+}
+.card-chrome-url span { font-size: 9px; color: #9ca3af; font-weight: 500; }
+.card-header {
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 11px;
+}
+.card-icon {
+  width: 36px; height: 36px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.card-name { font-size: 13.5px; font-weight: 700; color: #fff; }
+.card-status {
+  font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.75);
+  display: flex; align-items: center; gap: 4px; margin-top: 1px;
+}
+.card-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
+.card-body {
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 160px;
+  background: linear-gradient(160deg, #f0f4ff 0%, #f8f6ff 50%, #f0f8ff 100%);
+}
+.card-row { display: flex; align-items: flex-end; gap: 8px; }
+.card-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; color: #fff;
+}
+.card-bubble-bot {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.95);
+  border-radius: 12px 12px 12px 2px;
+  padding: 8px 11px;
+  font-size: 11px; line-height: 1.55; color: #111; max-width: 86%;
+}
+.card-bubble-user {
+  border-radius: 12px 12px 2px 12px;
+  padding: 8px 11px;
+  font-size: 11px; line-height: 1.55; color: #fff;
+  margin-left: auto; max-width: 78%;
+}
+.card-input {
+  margin: 6px 16px 14px;
+  background: #fff; border: 1px solid #e5e7eb;
+  border-radius: 24px; padding: 9px 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-input-ph { font-size: 11px; color: #d1d5db; flex: 1; }
+.card-send {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-brand-label {
+  text-align: center; padding: 0 16px 12px;
+  font-size: 10px; font-weight: 600; color: #9ca3af; letter-spacing: 0.04em;
+}
+
+/* Brand badge on the card */
+.brand-tag {
+  font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px;
+  margin-bottom: 6px; display: inline-block;
+}
+
+/* ── Ambient background needed behind chat bodies ── */
+.card-body-wrapper {
+  background: linear-gradient(160deg, #f0f4ff, #f8f6ff, #fff0fb);
+}
+
+/* ── Footer ── */
+.footer {
+  background: #0a0a0a; padding: 40px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { font-size: 14px; font-weight: 800; color: #fff; }
+.footer-logo span { color: #4249ff; }
+.footer-note { font-size: 11px; color: rgba(255,255,255,0.25); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-logo">Ribbo<span>.</span>ai</div>
+  <span class="nav-pill">Design Handoff · Hero Variations · 2026</span>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════════
+  SECTION 1 — HERO SECTION MOCKUP
+══════════════════════════════════════════════════ -->
+<div style="border-bottom: 1px solid #f1f5f9; padding: 24px 48px 16px; background:#fff;">
+  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af;">
+    Section 1 — Hero section mockup
+  </div>
+  <div style="font-size:13px; color:#6b7280; margin-top:3px;">
+    Proposed right column: 3 branded chatbots instead of one, showing versatility at a glance.
+  </div>
+</div>
+
+<section class="hero-section">
+
+  <!-- Left: Text content (faithful to current Hero.tsx) -->
+  <div class="hero-text">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Now supporting GPT-4o, Claude &amp; Gemini
+    </div>
+    <h1 class="hero-headline">
+      Your docs.<br>Your brand.<br>Your support agent.
+    </h1>
+    <p class="hero-sub">
+      Upload your content, pick an AI model, and deploy a support agent that answers customer questions 24/7 — on your website, WhatsApp, or Slack.
+    </p>
+    <div class="hero-ctas">
+      <a href="#" class="btn-primary">Start for free</a>
+      <a href="#" class="btn-ghost">
+        See how it works
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <div class="hero-trust">
+      <span class="trust-item">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4249ff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        No credit card required
+      </span>
+      <span class="trust-item">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4249ff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Live in minutes
+      </span>
+      <span class="trust-item">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4249ff" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Cancel anytime
+      </span>
+    </div>
+  </div>
+
+  <!-- Right: Three branded chatbots -->
+  <div class="hero-right">
+    <div class="hero-right-label">Looks like your brand</div>
+
+    <!-- ─ LEFT (back): Purple / Tech brand ─ -->
+    <div class="mini-chat hero-chat-left">
+      <div class="mini-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;"></div>
+        <div class="chrome-dot" style="background:#febc2e;"></div>
+        <div class="chrome-dot" style="background:#28c840;"></div>
+      </div>
+      <div class="mini-header" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">
+        <div class="mini-header-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div>
+          <div class="mini-header-name" style="color:#fff;">DevBot</div>
+          <div class="mini-header-status" style="color:rgba(255,255,255,0.65);">
+            <div class="mini-status-dot"></div> Online
+          </div>
+        </div>
+      </div>
+      <div class="mini-body-chat" style="background:linear-gradient(160deg,#f5f3ff,#ede9fe);">
+        <div class="mini-msg-row">
+          <div class="mini-avatar-sm" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">R</div>
+          <div class="mini-bubble-bot" style="font-size:10px;">Hi! Need help with the API?</div>
+        </div>
+        <div class="mini-bubble-user" style="background:linear-gradient(135deg,#7c3aed,#6d28d9); font-size:10px;">How do I authenticate?</div>
+        <div class="mini-msg-row">
+          <div class="mini-avatar-sm" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">R</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="mini-input-bar">
+        <span class="mini-input-ph">Ask a question…</span>
+        <div class="mini-send-btn" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ CENTER (front): Orange / E-commerce brand ─ -->
+    <div class="mini-chat hero-chat-center">
+      <div class="mini-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;"></div>
+        <div class="chrome-dot" style="background:#febc2e;"></div>
+        <div class="chrome-dot" style="background:#28c840;"></div>
+      </div>
+      <div class="mini-header" style="background:linear-gradient(135deg,#ea580c,#f97316);">
+        <div class="mini-header-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <div>
+          <div class="mini-header-name" style="color:#fff;">ShopBot</div>
+          <div class="mini-header-status" style="color:rgba(255,255,255,0.65);">
+            <div class="mini-status-dot"></div> Online · Instant replies
+          </div>
+        </div>
+      </div>
+      <div class="mini-body-chat" style="background:linear-gradient(160deg,#fff7ed,#ffedd5);">
+        <div class="mini-msg-row">
+          <div class="mini-avatar-sm" style="background:linear-gradient(135deg,#ea580c,#f97316);">R</div>
+          <div class="mini-bubble-bot">Hi! Looking for something specific today?</div>
+        </div>
+        <div class="mini-bubble-user" style="background:linear-gradient(135deg,#ea580c,#f97316);">I want to return my order.</div>
+        <div class="mini-msg-row">
+          <div class="mini-avatar-sm" style="background:linear-gradient(135deg,#ea580c,#f97316);">R</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="mini-input-bar">
+        <span class="mini-input-ph">Ask a question…</span>
+        <div class="mini-send-btn" style="background:linear-gradient(135deg,#ea580c,#f97316);">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ RIGHT (back): Teal / Healthcare brand ─ -->
+    <div class="mini-chat hero-chat-right">
+      <div class="mini-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;"></div>
+        <div class="chrome-dot" style="background:#febc2e;"></div>
+        <div class="chrome-dot" style="background:#28c840;"></div>
+      </div>
+      <div class="mini-header" style="background:linear-gradient(135deg,#0f766e,#0d9488);">
+        <div class="mini-header-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div>
+          <div class="mini-header-name" style="color:#fff;">CareDesk</div>
+          <div class="mini-header-status" style="color:rgba(255,255,255,0.65);">
+            <div class="mini-status-dot"></div> Online
+          </div>
+        </div>
+      </div>
+      <div class="mini-body-chat" style="background:linear-gradient(160deg,#f0fdf9,#ccfbf1);">
+        <div class="mini-msg-row">
+          <div class="mini-avatar-sm" style="background:linear-gradient(135deg,#0f766e,#0d9488);">R</div>
+          <div class="mini-bubble-bot" style="font-size:10px;">Hello! How can I help you today?</div>
+        </div>
+        <div class="mini-bubble-user" style="background:linear-gradient(135deg,#0f766e,#0d9488); font-size:10px;">Book an appointment</div>
+        <div class="mini-msg-row">
+          <div class="mini-avatar-sm" style="background:linear-gradient(135deg,#0f766e,#0d9488);">R</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="mini-input-bar">
+        <span class="mini-input-ph">Ask a question…</span>
+        <div class="mini-send-btn" style="background:linear-gradient(135deg,#0f766e,#0d9488);">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════
+  DIVIDER
+══════════════════════════════════════════════════ -->
+<div class="divider-strip">
+  <div class="divider-title">6 Brand Variations — Full Gallery</div>
+  <div class="divider-sub">Each widget uses a different color, icon, and brand identity. The typing indicator is the new liquid glass design throughout.</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════
+  SECTION 2 — FULL GALLERY
+══════════════════════════════════════════════════ -->
+<div style="padding: 24px 48px 12px; background:#fafafa; border-bottom:1px solid #f1f5f9;">
+  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af;">Section 2 — Brand variations gallery</div>
+  <div style="font-size:13px; color:#6b7280; margin-top:3px;">All 6 variations with full chat context. These show the range of customization available.</div>
+</div>
+
+<section class="gallery-section">
+  <div class="gallery-grid">
+
+
+    <!-- ════ CARD 1: TasteBot — Coffee/Amber ════ -->
+    <div class="chat-card">
+      <div class="card-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#febc2e;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#28c840;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="card-chrome-url"><span>tastebot.com</span></div>
+      </div>
+      <div class="card-header" style="background:linear-gradient(135deg,#92400e,#d97706);">
+        <div class="card-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+            <line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-name">TasteBot</div>
+          <div class="card-status"><span class="card-status-dot"></span> Online · Replies instantly</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#92400e,#d97706);">T</div>
+          <div class="card-bubble-bot">Hey! Ready to take your order. What can I get for you?</div>
+        </div>
+        <div class="card-bubble-user" style="background:linear-gradient(135deg,#92400e,#d97706);">Do you have oat milk lattes?</div>
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#92400e,#d97706);">T</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="card-input">
+        <span class="card-input-ph">Ask a question…</span>
+        <div class="card-send" style="background:linear-gradient(135deg,#92400e,#d97706);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+      <div class="card-brand-label">Color: #d97706 · Icon: Coffee cup · Brand: Hospitality</div>
+    </div>
+
+
+    <!-- ════ CARD 2: ShopBot — Orange/E-commerce ════ -->
+    <div class="chat-card">
+      <div class="card-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#febc2e;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#28c840;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="card-chrome-url"><span>shopbot.store</span></div>
+      </div>
+      <div class="card-header" style="background:linear-gradient(135deg,#ea580c,#f97316);">
+        <div class="card-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-name">ShopBot</div>
+          <div class="card-status"><span class="card-status-dot"></span> Online · Free returns</div>
+        </div>
+      </div>
+      <div class="card-body" style="background:linear-gradient(160deg,#fff7ed,#ffedd5,#fff7ed);">
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#ea580c,#f97316);">S</div>
+          <div class="card-bubble-bot">Hi! Looking for something specific today?</div>
+        </div>
+        <div class="card-bubble-user" style="background:linear-gradient(135deg,#ea580c,#f97316);">I want to return my order.</div>
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#ea580c,#f97316);">S</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="card-input">
+        <span class="card-input-ph">Ask a question…</span>
+        <div class="card-send" style="background:linear-gradient(135deg,#ea580c,#f97316);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+      <div class="card-brand-label">Color: #f97316 · Icon: Shopping bag · Brand: E-commerce</div>
+    </div>
+
+
+    <!-- ════ CARD 3: CareDesk — Teal/Healthcare ════ -->
+    <div class="chat-card">
+      <div class="card-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#febc2e;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#28c840;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="card-chrome-url"><span>caredesk.health</span></div>
+      </div>
+      <div class="card-header" style="background:linear-gradient(135deg,#0f766e,#0d9488);">
+        <div class="card-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-name">CareDesk</div>
+          <div class="card-status"><span class="card-status-dot"></span> Online · Confidential</div>
+        </div>
+      </div>
+      <div class="card-body" style="background:linear-gradient(160deg,#f0fdf9,#ccfbf1,#f0fdf9);">
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#0f766e,#0d9488);">C</div>
+          <div class="card-bubble-bot">Hello! How can I help you today?</div>
+        </div>
+        <div class="card-bubble-user" style="background:linear-gradient(135deg,#0f766e,#0d9488);">I need to book an appointment.</div>
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#0f766e,#0d9488);">C</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="card-input">
+        <span class="card-input-ph">Ask a question…</span>
+        <div class="card-send" style="background:linear-gradient(135deg,#0f766e,#0d9488);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+      <div class="card-brand-label">Color: #0d9488 · Icon: Heart · Brand: Healthcare</div>
+    </div>
+
+
+    <!-- ════ CARD 4: WealthAI — Navy/Finance ════ -->
+    <div class="chat-card">
+      <div class="card-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#febc2e;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#28c840;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="card-chrome-url"><span>wealthai.finance</span></div>
+      </div>
+      <div class="card-header" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);">
+        <div class="card-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+            <polyline points="16 7 22 7 22 13"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-name">WealthAI</div>
+          <div class="card-status"><span class="card-status-dot"></span> Online · Bank-grade security</div>
+        </div>
+      </div>
+      <div class="card-body" style="background:linear-gradient(160deg,#eff6ff,#dbeafe,#eff6ff);">
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);">W</div>
+          <div class="card-bubble-bot">Good day! How can I help with your finances?</div>
+        </div>
+        <div class="card-bubble-user" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);">What's my account balance?</div>
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);">W</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="card-input">
+        <span class="card-input-ph">Ask a question…</span>
+        <div class="card-send" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+      <div class="card-brand-label">Color: #1d4ed8 · Icon: Growth chart · Brand: Finance</div>
+    </div>
+
+
+    <!-- ════ CARD 5: GlowBot — Rose/Beauty ════ -->
+    <div class="chat-card">
+      <div class="card-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#febc2e;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#28c840;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="card-chrome-url"><span>glowbot.beauty</span></div>
+      </div>
+      <div class="card-header" style="background:linear-gradient(135deg,#be185d,#db2777);">
+        <div class="card-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-name">GlowBot</div>
+          <div class="card-status"><span class="card-status-dot"></span> Online · Beauty experts</div>
+        </div>
+      </div>
+      <div class="card-body" style="background:linear-gradient(160deg,#fff0f6,#fce7f3,#fff0f6);">
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#be185d,#db2777);">G</div>
+          <div class="card-bubble-bot">Hey! What can I help you find today? ✨</div>
+        </div>
+        <div class="card-bubble-user" style="background:linear-gradient(135deg,#be185d,#db2777);">What's good for dry skin?</div>
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#be185d,#db2777);">G</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="card-input">
+        <span class="card-input-ph">Ask a question…</span>
+        <div class="card-send" style="background:linear-gradient(135deg,#be185d,#db2777);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+      <div class="card-brand-label">Color: #db2777 · Icon: Star · Brand: Beauty &amp; Lifestyle</div>
+    </div>
+
+
+    <!-- ════ CARD 6: DevBot — Purple/Tech ════ -->
+    <div class="chat-card">
+      <div class="card-chrome">
+        <div class="chrome-dot" style="background:#ff5f57;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#febc2e;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="chrome-dot" style="background:#28c840;width:9px;height:9px;border-radius:50%;"></div>
+        <div class="card-chrome-url"><span>devbot.api</span></div>
+      </div>
+      <div class="card-header" style="background:linear-gradient(135deg,#6d28d9,#7c3aed);">
+        <div class="card-icon" style="background:rgba(255,255,255,0.15);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-name">DevBot</div>
+          <div class="card-status"><span class="card-status-dot"></span> Online · 99.9% uptime</div>
+        </div>
+      </div>
+      <div class="card-body" style="background:linear-gradient(160deg,#f5f3ff,#ede9fe,#f5f3ff);">
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#6d28d9,#7c3aed);">D</div>
+          <div class="card-bubble-bot">Hi! Need help with the API or docs?</div>
+        </div>
+        <div class="card-bubble-user" style="background:linear-gradient(135deg,#6d28d9,#7c3aed);">How do I authenticate?</div>
+        <div class="card-row">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#6d28d9,#7c3aed);">D</div>
+          <div class="typing-glass">
+            <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="card-input">
+        <span class="card-input-ph">Ask a question…</span>
+        <div class="card-send" style="background:linear-gradient(135deg,#6d28d9,#7c3aed);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+      </div>
+      <div class="card-brand-label">Color: #7c3aed · Icon: Code · Brand: Tech / SaaS</div>
+    </div>
+
+
+  </div><!-- /.gallery-grid -->
+
+  <!-- Note -->
+  <div style="max-width:1160px; margin:40px auto 0; background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:20px 24px; display:flex; align-items:flex-start; gap:14px;">
+    <div style="width:36px; height:36px; border-radius:10px; background:rgba(66,73,255,0.08); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4249ff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <div style="font-size:13px; font-weight:700; color:#0a0a0a; margin-bottom:5px;">Implementation note</div>
+      <div style="font-size:12.5px; color:#6b7280; line-height:1.65;">
+        The typing indicator shown in all 6 variants is the new <strong>liquid glass design</strong> — see <code style="background:#f3f4f6; padding:1px 5px; border-radius:4px; font-size:11px;">typing-animation.html</code> for the full CSS spec and implementation guide.
+        The brand color changes only apply to: the header background, user message bubbles, avatar background, and send button — the chat body gradient and typing indicator remain consistent across all brands.
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">Ribbo<span>.</span>ai</div>
+  <div class="footer-note">Design Handoff · Hero Chatbot Variations · v2 · 2026</div>
+</footer>
+
+</body>
+</html>
