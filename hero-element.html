@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ribbo — Hero Widget Element</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background: radial-gradient(ellipse 90% 60% at 50% 30%, #eef2ff 0%, #fff 70%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Widget shell ── */
+.widget {
+  width: 390px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.13),
+    0 8px 24px rgba(0,0,0,0.07),
+    0 2px 6px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.06);
+  background: #fff;
+  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── macOS chrome ── */
+.chrome {
+  background: #f5f5f7;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.chrome-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+/* ── Header ── */
+.header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.55s ease;
+}
+
+/* Profile-image style avatar — circular white container with emoji */
+.header-icon {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.96);
+  border: 2.5px solid rgba(255,255,255,0.55);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 24px;
+  line-height: 1;
+  user-select: none;
+}
+.header-name {
+  font-size: 14px; font-weight: 700;
+  color: #fff; line-height: 1.2;
+}
+.header-status {
+  font-size: 10.5px; font-weight: 600;
+  color: rgba(255,255,255,0.72);
+  display: flex; align-items: center; gap: 4px;
+  margin-top: 2px;
+}
+.status-dot { width: 5.5px; height: 5.5px; border-radius: 50%; background: #4ade80; }
+
+/* ── Chat body ── */
+.chat-body {
+  padding: 16px 16px 10px;
+  min-height: 226px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background 0.55s ease;
+}
+
+/* ── Message rows ── */
+.msg-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.msg-row.from-below { transform: translateY(10px); }
+.msg-row.from-right { transform: translateX(10px); justify-content: flex-end; }
+
+/* Small avatar (next to messages) */
+.avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+  color: #fff;
+  transition: background 0.55s ease;
+}
+
+/* ── Bubbles ── */
+.bubble-bot {
+  background: rgba(255,255,255,0.84);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.9);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.95);
+  border-radius: 14px 14px 14px 3px;
+  padding: 10px 13px;
+  font-size: 12px; line-height: 1.55;
+  color: #111; max-width: 84%;
+}
+.bubble-user {
+  border-radius: 14px 14px 3px 14px;
+  padding: 10px 13px;
+  font-size: 12px; line-height: 1.55;
+  color: #fff; max-width: 78%;
+  transition: background 0.55s ease;
+}
+
+/* ── Typing indicator — Apple-style ── */
+.typing-glass {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.82);
+  box-shadow:
+    0 6px 24px rgba(66,73,255,0.10),
+    0 2px 8px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.96);
+  border-radius: 14px 14px 14px 3px;
+  padding: 13px 16px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+@keyframes apple-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+  30%           { transform: translateY(-3px); opacity: 0.85; }
+}
+.typing-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(66, 73, 255, 0.72);
+  animation: apple-dot 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.16s; }
+.typing-dot:nth-child(3) { animation-delay: 0.32s; }
+
+/* ── Input bar ── */
+.input-wrap { padding: 6px 14px 14px; }
+.input-bar {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 9px 9px 9px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.input-ph { font-size: 12px; color: #9ca3af; flex: 1; }
+.send-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.55s ease;
+}
+.powered {
+  text-align: center; font-size: 9px;
+  color: #d1d5db; margin-top: 6px; letter-spacing: 0.02em;
+}
+</style>
+</head>
+<body>
+
+<div class="widget" id="widget">
+
+  <!-- macOS Chrome -->
+  <div class="chrome">
+    <div class="chrome-dot" style="background:#ff5f57;"></div>
+    <div class="chrome-dot" style="background:#febc2e;"></div>
+    <div class="chrome-dot" style="background:#28c840;"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header" id="header">
+    <div class="header-icon" id="header-icon"></div>
+    <div>
+      <div class="header-name" id="header-name"></div>
+      <div class="header-status">
+        <span class="status-dot"></span>
+        <span id="header-status-text"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat body -->
+  <div class="chat-body" id="chat-body">
+
+    <div class="msg-row from-below" id="msg-greeting">
+      <div class="avatar" id="av-greeting"></div>
+      <div class="bubble-bot" id="text-greeting"></div>
+    </div>
+
+    <div class="msg-row from-right" id="msg-user">
+      <div class="bubble-user" id="text-user"></div>
+    </div>
+
+    <div class="msg-row from-below" id="msg-typing">
+      <div class="avatar" id="av-typing"></div>
+      <div class="typing-glass">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+    </div>
+
+    <div class="msg-row from-below" id="msg-bot">
+      <div class="avatar" id="av-bot"></div>
+      <div class="bubble-bot" id="text-bot"></div>
+    </div>
+
+  </div>
+
+  <!-- Input bar -->
+  <div class="input-wrap">
+    <div class="input-bar">
+      <span class="input-ph">Ask a question…</span>
+      <div class="send-btn" id="send-btn">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </div>
+    </div>
+    <div class="powered">Powered by Ribbo</div>
+  </div>
+
+</div>
+
+<script>
+const brands = [
+  {
+    name: 'ShopBot',
+    status: 'Online · Instant replies',
+    c1: '#ea580c', c2: '#f97316',
+    chatBg: 'linear-gradient(160deg,#fff7ed,#ffedd5,#fff7ed)',
+    initial: 'S',
+    emoji: '🛍️',
+    greeting: 'Hi! Looking for something specific today?',
+    user: 'I want to return my order.',
+    bot: 'No problem — returns are free within 30 days. Let me pull up your order right now.',
+  },
+  {
+    name: 'CareDesk',
+    status: 'Online · Confidential',
+    c1: '#0f766e', c2: '#0d9488',
+    chatBg: 'linear-gradient(160deg,#f0fdf9,#ccfbf1,#f0fdf9)',
+    initial: 'C',
+    emoji: '🩺',
+    greeting: 'Hello! How can I help you today?',
+    user: 'Book an appointment please.',
+    bot: 'Dr. Chen has slots this Thursday at 2pm and 4pm. Which works for you?',
+  },
+  {
+    name: 'DevBot',
+    status: 'Online · 99.9% uptime',
+    c1: '#6d28d9', c2: '#7c3aed',
+    chatBg: 'linear-gradient(160deg,#f5f3ff,#ede9fe,#f5f3ff)',
+    initial: 'D',
+    emoji: '⚡',
+    greeting: 'Hi! Need help with the API or docs?',
+    user: 'How do I authenticate?',
+    bot: 'Use a Bearer token — Authorization: Bearer your_key. Full docs at docs.devbot.io',
+  },
+  {
+    name: 'TasteBot',
+    status: 'Online · Taking orders',
+    c1: '#92400e', c2: '#d97706',
+    chatBg: 'linear-gradient(160deg,#fffbeb,#fef3c7,#fffbeb)',
+    initial: 'T',
+    emoji: '☕',
+    greeting: 'Hey! Ready to take your order',
+    user: 'Do you have oat milk lattes?',
+    bot: "We do! Today's special is a brown sugar oat latte. Want to add one?",
+  },
+  {
+    name: 'WealthAI',
+    status: 'Online · Bank-grade security',
+    c1: '#1e3a8a', c2: '#1d4ed8',
+    chatBg: 'linear-gradient(160deg,#eff6ff,#dbeafe,#eff6ff)',
+    initial: 'W',
+    emoji: '📈',
+    greeting: 'Good day! How can I help with your finances?',
+    user: "What's my account balance?",
+    bot: 'Your main account is $12,847.32 · Savings: $4,210.55 — as of today.',
+  },
+  {
+    name: 'GlowBot',
+    status: 'Online · Beauty experts',
+    c1: '#be185d', c2: '#db2777',
+    chatBg: 'linear-gradient(160deg,#fff0f6,#fce7f3,#fff0f6)',
+    initial: 'G',
+    emoji: '🌸',
+    greeting: 'Hey! What can I help you find today? ✨',
+    user: "What's good for dry skin?",
+    bot: 'Our Hydra-Boost serum is a bestseller — hyaluronic acid + vitamin E. Add to cart?',
+  },
+];
+
+const widget   = document.getElementById('widget');
+const header   = document.getElementById('header');
+const hIcon    = document.getElementById('header-icon');
+const hName    = document.getElementById('header-name');
+const hStatus  = document.getElementById('header-status-text');
+const chatBody = document.getElementById('chat-body');
+const sendBtn  = document.getElementById('send-btn');
+
+const msgG = document.getElementById('msg-greeting');
+const msgU = document.getElementById('msg-user');
+const msgT = document.getElementById('msg-typing');
+const msgB = document.getElementById('msg-bot');
+
+const avG  = document.getElementById('av-greeting');
+const avT  = document.getElementById('av-typing');
+const avB  = document.getElementById('av-bot');
+
+const textG = document.getElementById('text-greeting');
+const textU = document.getElementById('text-user');
+const textB = document.getElementById('text-bot');
+
+let idx = 0;
+let timers = [];
+
+function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+function hide(el, cls) { el.style.opacity = '0'; el.className = 'msg-row ' + cls; }
+function show(el)      { el.style.opacity = '1'; el.style.transform = 'none'; }
+
+function applyBrand(b) {
+  const grad = 'linear-gradient(135deg,' + b.c1 + ',' + b.c2 + ')';
+  header.style.background     = grad;
+  chatBody.style.background   = b.chatBg;
+  sendBtn.style.background    = grad;
+
+  hIcon.textContent = b.emoji;
+  hName.textContent = b.name;
+  hStatus.textContent = b.status;
+
+  [avG, avT, avB].forEach(function(av) { av.style.background = grad; av.textContent = b.initial; });
+
+  textG.textContent = b.greeting;
+  textU.textContent = b.user;
+  textB.textContent = b.bot;
+  textU.style.background = grad;
+}
+
+function run(i) {
+  clearTimers();
+  applyBrand(brands[i]);
+
+  hide(msgG, 'from-below');
+  hide(msgU, 'from-right');
+  hide(msgT, 'from-below');
+  hide(msgB, 'from-below');
+
+  widget.style.opacity = '0';
+  timers.push(setTimeout(function() { widget.style.opacity = '1'; }, 60));
+
+  timers.push(setTimeout(function() { show(msgG); }, 400));
+  timers.push(setTimeout(function() { show(msgU); }, 1700));
+  timers.push(setTimeout(function() { show(msgT); }, 2700));
+
+  timers.push(setTimeout(function() {
+    hide(msgT, 'from-below');
+    timers.push(setTimeout(function() { show(msgB); }, 180));
+  }, 4100));
+
+  timers.push(setTimeout(function() { widget.style.opacity = '0'; }, 6400));
+  timers.push(setTimeout(function() {
+    idx = (idx + 1) % brands.length;
+    run(idx);
+  }, 7100));
+}
+
+run(0);
+</script>
+</body>
+</html>

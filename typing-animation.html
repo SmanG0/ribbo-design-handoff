@@ -166,28 +166,27 @@ body {
 }
 .dot-new-static {
   width: 7px; height: 7px; border-radius: 50%;
-  background: linear-gradient(135deg, #4249ff, #8b5cf6);
-  box-shadow: 0 0 12px rgba(66,73,255,0.55), 0 0 4px rgba(139,92,246,0.3);
+  background: rgba(66, 73, 255, 0.72);
+  transform: translateY(-3px);
+  opacity: 0.85;
 }
-@keyframes liquid-pulse {
-  0%, 100% {
-    transform: scale(0.62) translateY(2px);
-    opacity: 0.32;
-    box-shadow: 0 0 4px rgba(66,73,255,0.12);
+@keyframes apple-dot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.35;
   }
-  50% {
-    transform: scale(1.18) translateY(-2px);
-    opacity: 1;
-    box-shadow: 0 0 16px rgba(66,73,255,0.58), 0 0 5px rgba(139,92,246,0.38);
+  30% {
+    transform: translateY(-3px);
+    opacity: 0.85;
   }
 }
 .dot-new-anim {
   width: 7px; height: 7px; border-radius: 50%;
-  background: linear-gradient(135deg, #4249ff, #8b5cf6);
-  animation: liquid-pulse 1.05s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  background: rgba(66, 73, 255, 0.72);
+  animation: apple-dot 1.2s ease-in-out infinite;
 }
-.dot-new-anim:nth-child(2) { animation-delay: 0.21s; }
-.dot-new-anim:nth-child(3) { animation-delay: 0.42s; }
+.dot-new-anim:nth-child(2) { animation-delay: 0.16s; }
+.dot-new-anim:nth-child(3) { animation-delay: 0.32s; }
 
 /* ── Property tags ── */
 .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 16px; }
